@@ -176,42 +176,15 @@ const CATS = [
       img : your AI image (e.g. "images/moka.jpg"). Leave "" for a colour block.
       url : your affiliate link.  NEVER put a price here.
    ════════════════════════════════════════════════════════════ */
-const PRODUCTS = [
-  { cat:'fash', img:'', url:'https://www.amazon.sa/dp/B0B2MNVL6V',
-    en:{t:'LOVEVOOK laptop backpack for women, 15.6"', w:'A USB port and quilted design — 4.8 stars from 4,400 buyers.'},
-    ar:{t:'شنطة لابتوب نسائية LOVEVOOK، 15.6 إنش', w:'منفذ USB وتصميم مبطّن أنيق — 4.8 نجوم من 4,400 مشترية.'},
-    scene:'desk corner, morning light' },
+let PRODUCTS = [];
+async function loadProducts(){
+  try{
+    const r = await fetch('products.json?v=' + Date.now());
+    PRODUCTS = await r.json();
+  }catch(e){ PRODUCTS = []; }
+  drawCats(); drawFeed();
+}
 
-  { cat:'home', img:'', url:'#',
-    en:{t:'Stovetop moka pot, 6-cup', w:'Spare gaskets are sold separately — the part that kills cheap ones.'},
-    ar:{t:'ركوة موكا للغاز، 6 فناجين', w:'الجلدة تنباع لحالها — وهي أول شي بيخرب بالأنواع الرخيصة.'},
-    scene:'morning counter, steam' },
-
-  { cat:'home', img:'', url:'#',
-    en:{t:'Airtight glass jars, set of 5', w:'The clamp seal still holds after a year of daily opening.'},
-    ar:{t:'برطمانات زجاج محكمة، 5 قطع', w:'القفل بيضل محكم بعد سنة استعمال يومي.'},
-    scene:'open pantry shelf' },
-
-  { cat:'home', img:'', url:'#',
-    en:{t:'Handheld milk frother', w:'USB-C, not the AA batteries most of these still use.'},
-    ar:{t:'خفّاقة حليب يدوية', w:'شحن USB-C، مو بطاريات زي معظم الأنواع.'},
-    scene:'latte mid-pour' },
-
-  { cat:'home', img:'', url:'#',
-    en:{t:'Roll-up over-sink dish rack', w:'Rolls away flat. Built for kitchens with no counter space.'},
-    ar:{t:'مصفاة جلي قابلة للطي فوق المجلى', w:'بتنطوي وتختفي. للمطابخ الصغيرة يلي مافيها مساحة.'},
-    scene:'small sink, herbs on sill' },
-
-  { cat:'home', img:'', url:'#',
-    en:{t:'Ceramic non-stick pan, 28cm', w:'Still non-stick past a year — hand wash only.'},
-    ar:{t:'مقلاة سيراميك غير لاصقة، 28سم', w:'بتضل غير لاصقة بعد سنة — غسيل يدوي بس.'},
-    scene:'eggs in pan, evening light' },
-
-  { cat:'home', img:'', url:'#',
-    en:{t:'Gooseneck kettle, temperature control', w:'Holds a set temperature instead of just boiling.'},
-    ar:{t:'غلاية رقبة إوزة بتحكم بالحرارة', w:'بتثبّت الحرارة، مو بس بتغلي.'},
-    scene:'pour-over at dawn' }
-];
 
 /* ---------- UI strings ---------- */
 const T = {
@@ -299,7 +272,7 @@ function setLang(l){
 document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 document.getElementById('q').oninput = e=>{ query=e.target.value.trim().toLowerCase(); drawFeed(); };
 
-drawCats(); drawFeed();
+loadProducts();
 </script>
 </body>
 </html>
